@@ -3,7 +3,7 @@ import { addFood, listFood, removeFood } from '../controllers/foodController.js'
 import multer from 'multer';
 const foodRouter = express.Router();
 
-//Image Storage Engine (Saving Image to uploads folder & rename it)
+//Image Storage Engine: Saving Image to upload folder & rename it
 
 const storage = multer.diskStorage({
     destination: 'uploads',
