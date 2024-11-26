@@ -1,4 +1,4 @@
-# Tomato-Food-delivery
+# Tomato-delivery
 This open source project tutorial:
 https://youtu.be/DBMPXJJfQEA?si=eFTY87Dtw_NBOvPX
 ## Tech Stack
