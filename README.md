@@ -1,0 +1,5 @@
+# Tomato-Food-delivery
+This open source project tutorial:
+https://youtu.be/DBMPXJJfQEA?si=eFTY87Dtw_NBOvPX
+## Tech Stack
+React JS, MongoDB, Express, Node JS, Stripe
