@@ -1,7 +1,6 @@
 # Tomato-delivery
 This open source project tutorial is from: <br />
 https://youtu.be/DBMPXJJfQEA?si=eFTY87Dtw_NBOvPX <br />
-![image]
-(https://github.com/MingcanYang/Tomato-Delivery/blob/main/Screenshots/01.png?raw=true)
+![image](/Screenshots/01.png)
 ## Tech Stack
 React JS, MongoDB, Express, Node JS, Stripe
