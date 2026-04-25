@@ -209,7 +209,7 @@ const placeOrder = async (req, res) => {
 const listOrders = async (req, res) => {
     try {
         await cleanupExpiredOrders();
-        const orders = await orderModel.find({});
+        const orders = await orderModel.find({}).sort({ date: -1 });
         res.json({ success: true, data: orders })
     } catch (error) {
         console.log(error);
@@ -221,7 +221,7 @@ const listOrders = async (req, res) => {
 const userOrders = async (req, res) => {
     try {
         await cleanupExpiredOrders({ userId: req.body.userId });
-        const orders = await orderModel.find({ userId: req.body.userId });
+        const orders = await orderModel.find({ userId: req.body.userId }).sort({ date: -1 });
         res.json({ success: true, data: orders })
     } catch (error) {
         console.log(error);

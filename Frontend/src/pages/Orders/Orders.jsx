@@ -7,6 +7,7 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [expandedOrders, setExpandedOrders] = useState({});
   const [expandedCompletedOrders, setExpandedCompletedOrders] = useState({});
   const [activeGroup, setActiveGroup] = useState('in-progress');
   const statusSteps = ['Food Processing', 'Out for delivery', 'Delivered'];
@@ -66,10 +67,19 @@ const Orders = () => {
     }));
   };
 
+  const toggleOrder = (orderId) => {
+    setExpandedOrders((current) => ({
+      ...current,
+      [orderId]: !current[orderId],
+    }));
+  };
+
   const renderOrderCard = (order, isCompletedSection = false) => {
     const currentStatus = order.status || 'Food Processing';
     const currentStep = getStatusStepIndex(currentStatus);
-    const isExpanded = !isCompletedSection || !!expandedCompletedOrders[order._id];
+    const isExpanded = isCompletedSection
+      ? !!expandedCompletedOrders[order._id]
+      : !!expandedOrders[order._id];
 
     return (
       <article key={order._id} className={`order-card ${isCompletedSection ? 'order-card-completed' : ''}`}>
@@ -85,16 +95,14 @@ const Orders = () => {
                 {order.payment ? 'Paid' : 'Payment Pending'}
               </span>
             </div>
-            {isCompletedSection ? (
-              <button
-                type="button"
-                className="order-toggle-button"
-                onClick={() => toggleCompletedOrder(order._id)}
-                aria-expanded={isExpanded}
-              >
-                <p>{isExpanded ? 'Hide details' : 'View details'}</p>
-              </button>
-            ) : null}
+            <button
+              type="button"
+              className="order-toggle-button"
+              onClick={() => isCompletedSection ? toggleCompletedOrder(order._id) : toggleOrder(order._id)}
+              aria-expanded={isExpanded}
+            >
+              <p>{isExpanded ? 'Hide details' : 'View details'}</p>
+            </button>
           </div>
         </div>
 
