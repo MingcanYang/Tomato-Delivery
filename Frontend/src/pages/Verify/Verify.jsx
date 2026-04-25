@@ -28,7 +28,7 @@ const Verify = () => {
 
       if (result.success) {
         clearCart();
-        navigate("/");
+        navigate("/orders");
       } else {
         navigate("/cart");
       }
