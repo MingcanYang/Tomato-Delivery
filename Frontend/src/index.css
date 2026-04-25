@@ -10,6 +10,27 @@
 body{
   min-height: 100vh;
 }
+:root{
+  --button-rect-height: 44px;
+  --button-rect-radius: 12px;
+  --button-pill-height: 42px;
+}
+p{
+  font-size: 16px !important;
+  line-height: 1.7 !important;
+}
+input::placeholder,
+textarea::placeholder{
+  font-size: 16px !important;
+  line-height: 1.7 !important;
+}
+button p{
+  margin: 0;
+  font-size: 16px !important;
+  line-height: 1.7 !important;
+  font-weight: inherit;
+  color: inherit !important;
+}
 a{
   text-decoration: none;
   color:inherit;
@@ -17,6 +38,12 @@ a{
 .app{
   width: 80%;
   margin: auto;
+  overflow: visible;
+}
+.admin-app{
+  width: 100%;
+  min-height: 100vh;
+  background: #f7f7f8;
 }
 @keyframes fadeIn {
   0%{

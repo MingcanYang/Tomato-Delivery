@@ -1,8 +1,11 @@
-import React from 'react';
-import { menu_list } from '../../assets/assets';
+import React, { useContext } from 'react';
+import { assets, menu_list } from '../../assets/assets';
+import { StoreContext } from '../../context/StoreContext';
 import './Menu.css';
 
 const Menu = ({ category, setCategory }) => {
+  const { searchQuery, setSearchQuery } = useContext(StoreContext);
+
   return (
     <div className="explore-menu" id="explore-menu">
       <h1>Explore our menu</h1>
@@ -17,6 +20,15 @@ const Menu = ({ category, setCategory }) => {
 
           )
         })}
+      </div>
+      <div className="menu-search">
+        <img src={assets.search_icon} alt="" />
+        <input
+          type="search"
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+          placeholder="Search dishes by name, category, or description"
+        />
       </div>
       <hr></hr>
     </div>

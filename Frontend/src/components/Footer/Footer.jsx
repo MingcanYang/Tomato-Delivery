@@ -3,6 +3,8 @@ import { assets } from '../../assets/assets';
 import './Footer.css';
 
 const Footer = () => {
+    const currentYear = new Date().getFullYear();
+
     return (
         <div className='footer'>
             <div className="footer" id="footer">
@@ -20,22 +22,22 @@ const Footer = () => {
                     <div className="footer-content-right">
                         <h2>COMPANY</h2>
                         <ul>
-                            <li>Home</li>
-                            <li>About Us</li>
-                            <li>Delivery</li>
+                            <li>Menu</li>
+                            <li>Orders</li>
+                            <li>Career</li>
                             <li>Privacy policy</li>
                         </ul>
                     </div>
                     <div className="footer-content-center">
                         <h2>GET IN TOUCH</h2>
                         <ul>
-                            <li>+0-000-000-0000</li>
-                            <li>contact@tomato.com</li>
+                            <li>+61 000 000 000</li>
+                            <li>support@tomato-delivery.com</li>
                         </ul>
                     </div>
                 </div>
                 <hr />
-                <p className="footer-copyright">Copyright 2024 © Tomato.com-All Right Reserved </p>
+                <p className="footer-copyright">Copyright {currentYear} © Tomato.com-All Right Reserved </p>
             </div>
         </div>
     )

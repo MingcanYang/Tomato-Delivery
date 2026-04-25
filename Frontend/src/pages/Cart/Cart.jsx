@@ -4,8 +4,14 @@ import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
 
 const Cart = () => {
-  const { cartItems, removeFromCart, food_list,getTotalCartAmount} = useContext(StoreContext);
+  const { cartItems, addToCart, removeFromCart, food_list,getTotalCartAmount, url} = useContext(StoreContext);
 const navigate=useNavigate();
+const removeItem = async (itemId) => {
+  const quantity = cartItems[itemId] || 0;
+  for (let count = 0; count < quantity; count += 1) {
+    await removeFromCart(itemId);
+  }
+}
   return (
     <div className="cart">
       <div className="cart-items">
@@ -23,12 +29,16 @@ const navigate=useNavigate();
           if (cartItems[item._id] > 0) {
             return (
               <div className="cart-items-item" key={item._id}>
-                <img src={item.image} alt={item.name} />
+                <img src={`${url}/images/${item.image}`} alt={item.name} />
                 <p>{item.name}</p>
                 <p>${item.price}</p>
-                <p>{cartItems[item._id]}</p>
+                <div className="cart-quantity-control">
+                  <button type="button" onClick={() => removeFromCart(item._id)} aria-label={`Decrease ${item.name}`}><p>-</p></button>
+                  <span>{cartItems[item._id]}</span>
+                  <button type="button" onClick={() => addToCart(item._id)} aria-label={`Increase ${item.name}`}><p>+</p></button>
+                </div>
                 <p>${item.price * cartItems[item._id]}</p>
-                <p className='cross' onClick={() => removeFromCart(item._id)}>x</p>
+                <button type="button" className='remove-btn' onClick={() => removeItem(item._id)}><p>Remove</p></button>
            
               </div>
               
@@ -60,14 +70,14 @@ const navigate=useNavigate();
             </div>
            
           </div>
-          <button onClick={()=>navigate('/order')}>Proceed To Checkout</button>
+          <button onClick={()=>navigate('/order')}><p>Proceed To Checkout</p></button>
         </div>
         <div className="cart-promocode">
           <div>
             <p>If you have a promo code,Enter it here</p>
           <div className="cart-promocode-input">
             <input type="text" placeholder="Promo Code" />
-            <button>Submit</button>
+            <button><p>Submit</p></button>
           </div>
           
           </div>

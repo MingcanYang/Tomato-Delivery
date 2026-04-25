@@ -32,4 +32,6 @@
 }
 .place-order .cart-total button{
     margin-top: 30px;
+    min-height: var(--button-rect-height);
+    border-radius: var(--button-rect-radius);
 }

@@ -50,6 +50,28 @@
     border:4px solid tomato;
     padding: 2px;;
 }
+.menu-search{
+    width: min(560px,100%);
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    padding: 0 12px;
+    background: white;
+}
+.menu-search img{
+    width: 20px;
+}
+.menu-search input{
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #262626;
+}
 @media (max-width:1050px){
     .explore-menu-text{
         max-width: 100%;

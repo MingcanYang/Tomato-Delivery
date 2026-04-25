@@ -1,30 +1,38 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import { assets } from '../../assets/assets';
 import './Navbar.css';
 
 const Navbar = ({ setShowLogin }) => {
-  const [menu, setMenu] = useState("home");
-  const { getTotalCartAmount } = useContext(StoreContext);
+  const location = useLocation();
+  const { getTotalCartItems, token } = useContext(StoreContext);
+  const totalCartItems = getTotalCartItems();
+
+  const getMenuClass = (path) => {
+    return location.pathname === path ? "active" : "";
+  };
+
   return (
     <div className='navbar'>
       <Link to='/' ><img src={assets.logo} alt="" className="log" /></Link>
       <ul className="navbar-menu">
-        <Link to="/" onClick={() => setMenu("home")} className={menu === "home" ? "active" : ""}>home</Link>
-        <a href="#explore-menu" onClick={() => setMenu("menu")} className={menu === "menu" ? "active" : ""}>menu</a>
-        <a href="#app-download" onClick={() => setMenu("mobile-app")} className={menu === "mobile-app" ? "active" : ""}>mobile-app</a>
-        <a href="#footer" onClick={() => setMenu("contact-us")} className={menu === "contact-us" ? "active" : ""}>contact us</a>
+        <Link to="/" className={getMenuClass("/")}> menu</Link>
+        <Link to="/orders" className={getMenuClass("/orders")}> orders</Link>
+        <Link to="/contact" className={getMenuClass("/contact")}> contact us</Link>
       </ul>
       <div className="navbar-right">
-        <img src={assets.search_icon} alt="" />
         <div className="navbar-search-icon">
           <Link to='/cart'><img src={assets.basket_icon} alt="" /></Link>
-          <div className={getTotalCartAmount() === 0 ? "" : "dot"}>
-
-          </div>
+          {totalCartItems > 0 && <div className="dot">{totalCartItems}</div>}
         </div>
-        <button onClick={() => setShowLogin(true)}>sign in</button>
+        {!token ? (
+          <button onClick={() => setShowLogin(true)}><p>sign in</p></button>
+        ) : (
+          <Link to="/profile" className="navbar-profile-button" aria-label="Go to profile">
+            <img src={assets.profile_icon} alt="" />
+          </Link>
+        )}
       </div>
     </div>
   )

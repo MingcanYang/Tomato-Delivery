@@ -7,8 +7,20 @@
 }
 .food-display-list{
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 30px;
     margin-top: 30px;
     row-gap: 50px;
+}
+.search-results-list{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 36px;
+    row-gap: 50px;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.food-display-empty{
+    margin-top: 20px;
+    color: #747474;
 }

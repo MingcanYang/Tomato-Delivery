@@ -43,8 +43,9 @@
 }
 .login-popup-container button{
     border:none;
-    padding :10px;
-    border-radius: 4px;
+    min-height: var(--button-rect-height);
+    padding :0 16px;
+    border-radius: var(--button-rect-radius);
     color:white;
     background-color: tomato;
     font-size: 15px;
