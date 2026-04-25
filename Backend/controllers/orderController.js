@@ -40,6 +40,13 @@ const expireOrderIfNeeded = async (order) => {
                 await markOrderPaid(order);
                 return false;
             }
+
+            // Keep the order while the customer is still inside an active Stripe
+            // checkout session. Deleting it here breaks the success redirect flow
+            // because /verify can no longer find the order after payment completes.
+            if (session.status === "open") {
+                return false;
+            }
         } catch (error) {
             console.log("Failed to check Stripe session for expired order", order._id.toString(), error.message);
         }
@@ -261,6 +268,9 @@ const verifyOrder = async (req, res) => {
         }
         else if (await expireOrderIfNeeded(order)) {
             res.json({ success: false, message: "Order expired" })
+        }
+        else if (session.status === "open") {
+            res.json({ success: false, message: "Payment still pending" })
         }
         else if (!order.payment) {
             await orderModel.findByIdAndDelete(order._id)
