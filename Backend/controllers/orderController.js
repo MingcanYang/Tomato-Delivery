@@ -8,6 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // config variables
 const currency = "usd";
 const deliveryCharge = 2;
+// const frontend_URL = "http://localhost:5173";
 const frontend_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const validStatuses = ["Food Processing", "Out for delivery", "Delivered"];
 const orderExpiryMs = 60 * 1000;
