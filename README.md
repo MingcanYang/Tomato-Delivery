@@ -1,53 +1,46 @@
 # Tomato Delivery
 
-Tomato Delivery is a full-stack food ordering application built with React, Node.js, Express, MongoDB, and Stripe. It includes a customer-facing storefront, cart and checkout flow, payment verification, order tracking, a contact/support flow, profile and message history, and an admin dashboard for managing foods, orders, and customer replies.
+Tomato Delivery is a full-stack food ordering app built with React, Vite, Node.js, Express, MongoDB, and Stripe. It includes a customer storefront, authentication, cart and checkout, order history, support messaging, profile views, and an admin panel for foods, orders, and customer replies.
 
 ## Live Demo
 
-Try the deployed application here:
-
-- Customer Web:  
-(email: mcy@mail.com; password: 123456!@#)  
-https://tomato-delivery-f-yzxf.onrender.com/
-- Admin Dashboard:  
-(admin token: admin123)  
-https://tomato-delivery-f-yzxf.onrender.com/admin
+- Customer Web  
+  `https://tomato-delivery-f-yzxf.onrender.com/`  
+  Demo account: `mcy@mail.com` / `123456!@#`
+- Admin Route  
+  `https://tomato-delivery-f-yzxf.onrender.com/admin`  
+  Admin access uses the backend `ADMIN_TOKEN` value entered in the UI
 
 ## Project Overview
 
-The application is split into two parts:
+- `Frontend/`: Vite + React frontend with multiple client-side routes
+- `Backend/`: Express API server connected to MongoDB
 
-- `Frontend/`: a Vite + React single-page application
-- `Backend/`: an Express API server connected to MongoDB
+The frontend handles food browsing, search, authentication, cart state, checkout, order tracking, profile data, support messages, and the `/admin` route.
 
-The frontend handles browsing food items, authentication, cart state, checkout, order history, contact messages, profile views, and the admin interface.  
-The backend handles user auth, food CRUD, cart persistence, order creation and verification, Stripe checkout sessions, support messages, admin replies, and serving uploaded food images.
+The backend handles authentication, food CRUD, cart persistence for signed-in users, Stripe Checkout session creation and verification, support messages, admin replies, and image hosting from `Backend/uploads`.
 
 ## Core Features
 
 ### Customer Features
 
 - User registration and login
-- Food list loaded from MongoDB instead of hardcoded frontend data
-- Category browsing and search
-- Add/remove cart items with guest cart persistence
-- Cart sync after login
-- Checkout with Stripe
+- Food list loaded from MongoDB
+- Category filter and keyword search
+- Guest cart stored in `localStorage`
+- Guest cart sync to the server after login
+- Stripe checkout flow
 - Payment verification page
-- Order history page with:
-  - in-progress and completed filters
-  - collapsible order cards
-  - delivery progress states
-  - newest orders shown first
-- Contact page for support messages
-- Profile page with:
-  - personal info
-  - admin replies/messages
-  - logout
+- Order history with newest orders first
+- In-progress and completed order filters
+- Expandable order details for items, totals, and delivery address
+- Order status tracking: `Food Processing`, `Out for delivery`, `Delivered`
+- Contact form for support requests
+- Profile page with personal info, admin replies, and logout
 
 ### Admin Features
 
-- Dedicated `/admin` dashboard route
+- Dedicated frontend route: `/admin`
 - Food management:
   - list foods
   - add food
@@ -60,16 +53,17 @@ The backend handles user auth, food CRUD, cart persistence, order creation and v
   - update order status
 - Message management:
   - review customer messages
-  - send admin replies
+  - send replies
 
 ### Payment and Order Handling
 
-- Stripe Checkout session creation on the backend
-- Success redirect to frontend verification route
-- Server-side verification using Stripe session data
-- Cart clearing after successful verification
-- Protection against deleting active checkout orders during payment flow
-- Automatic cleanup logic for expired unpaid orders
+- Stripe Checkout session is created on the backend
+- Stripe success and cancel redirects both go to `/verify`
+- Payment is verified server-side using the Stripe `session_id`
+- Signed-in user cart is cleared in the database after successful payment
+- Frontend guest cart is cleared after successful verification
+- Unpaid orders are cleaned up automatically after expiration
+- Open Stripe checkout sessions are preserved so verification can still complete
 
 ## Tech Stack
 
@@ -78,7 +72,7 @@ The backend handles user auth, food CRUD, cart persistence, order creation and v
 - React 18
 - Vite
 - React Router
-- Plain CSS modules/files per page/component
+- Plain CSS files
 
 ### Backend
 
@@ -87,7 +81,7 @@ The backend handles user auth, food CRUD, cart persistence, order creation and v
 - MongoDB + Mongoose
 - JWT authentication
 - Multer for image uploads
-- Stripe for payment
+- Stripe Checkout
 
 ## Application Structure
 
@@ -103,11 +97,12 @@ Tomato-Delivery/
 │   ├── uploads/
 │   └── server.js
 ├── Frontend/
+│   ├── public/
 │   ├── src/
+│   │   ├── assets/
 │   │   ├── components/
 │   │   ├── context/
-│   │   ├── pages/
-│   │   └── assets/
+│   │   └── pages/
 │   └── vite.config.js
 └── README.md
 ```
@@ -118,35 +113,35 @@ Tomato-Delivery/
 
 - `POST /api/user/register`
 - `POST /api/user/login`
-- `GET /api/user/profile`
+- `GET /api/user/profile` - requires user `token`
 
 ### Food
 
 - `GET /api/food/list`
-- `POST /api/food/add`
-- `POST /api/food/update`
-- `POST /api/food/remove`
+- `POST /api/food/add` - requires `admin-token`
+- `POST /api/food/update` - requires `admin-token`
+- `POST /api/food/remove` - requires `admin-token`
 
 ### Cart
 
-- `POST /api/cart/get`
-- `POST /api/cart/add`
-- `POST /api/cart/remove`
+- `POST /api/cart/get` - requires user `token`
+- `POST /api/cart/add` - requires user `token`
+- `POST /api/cart/remove` - requires user `token`
 
 ### Order
 
-- `GET /api/order/list`
-- `POST /api/order/userorders`
-- `POST /api/order/place`
-- `POST /api/order/status`
+- `GET /api/order/list` - requires `admin-token`
+- `POST /api/order/userorders` - requires user `token`
+- `POST /api/order/place` - requires user `token`
+- `POST /api/order/status` - requires `admin-token`
 - `POST /api/order/verify`
 
 ### Message
 
 - `POST /api/message/send`
-- `GET /api/message/list`
-- `GET /api/message/mine`
-- `POST /api/message/reply`
+- `GET /api/message/list` - requires `admin-token`
+- `GET /api/message/mine` - requires user `token`
+- `POST /api/message/reply` - requires `admin-token`
 
 ## Local Development
 
@@ -171,9 +166,9 @@ cd ../Frontend
 npm install
 ```
 
-### 4. Configure environment variables
+### 4. Configure backend environment variables
 
-Create `Backend/.env` with values like:
+Create `Backend/.env`:
 
 ```env
 MONGODB_URI=your_mongodb_connection_string
@@ -184,7 +179,17 @@ ADMIN_TOKEN=your_admin_token
 PORT=4000
 ```
 
-### 5. Run the backend
+### 5. Configure frontend environment variables
+
+Optional for local development because the frontend falls back to `http://localhost:4000`.
+
+Create `Frontend/.env` if you want to set it explicitly:
+
+```env
+VITE_API_URL=http://localhost:4000
+```
+
+### 6. Run the backend
 
 From `Backend/`:
 
@@ -192,7 +197,7 @@ From `Backend/`:
 npm run server
 ```
 
-### 6. Run the frontend
+### 7. Run the frontend
 
 From `Frontend/`:
 
@@ -207,7 +212,7 @@ Default local URLs:
 
 ## Database Seeding
 
-The project includes a seed script to populate food data in MongoDB.
+The project includes a seed script that upserts the food catalog into MongoDB.
 
 From `Backend/`:
 
@@ -215,11 +220,14 @@ From `Backend/`:
 npm run seed:foods
 ```
 
-This writes the menu items into the database and uses images from `Backend/uploads/`.
+The seeded records reference image filenames already stored in `Backend/uploads/`.
 
 ## Deployment Notes
 
-The project can be deployed on Render as two separate services:
+This project is typically deployed as:
+
+- one backend service from `Backend/`
+- one frontend static site from `Frontend/`
 
 ### Backend on Render
 
@@ -268,34 +276,23 @@ Required environment variable:
 VITE_API_URL=https://your-backend.onrender.com
 ```
 
-### Render SPA Rewrite Rule
+### Render Rewrite Rule for Client Routes
 
-Because the frontend uses React Router, configure this rewrite rule in Render Static Site settings:
+Because the frontend uses React Router client-side routing, configure this rewrite rule in Render Static Site settings:
 
 - Source: `/*`
 - Destination: `/index.html`
 - Action: `Rewrite`
 
-Without this, routes like `/admin`, `/orders`, or `/profile` will return `Not Found` on direct refresh.
+Without this, direct refreshes on routes like `/admin`, `/orders`, or `/profile` will return `Not Found`.
 
-## Important Implementation Notes
+## Important Notes
 
-- The frontend uses environment variables for API and redirect URLs.
-- Old localhost URLs are kept in code comments as local references, but deployment should rely on environment variables.
-- `Backend/.env` should never be committed.
-- Food images are served from:
-
-```text
-/images/<filename>
-```
-
-- Admin functionality lives in the frontend route:
-
-```text
-/admin
-```
-
-- The admin dashboard requires `ADMIN_TOKEN` configured on the backend.
+- The frontend uses `VITE_API_URL` for API requests, with `http://localhost:4000` as the local fallback.
+- The backend uses `FRONTEND_URL` when building Stripe redirect URLs.
+- `Backend/.env` should not be committed.
+- Food images are served from `/images/<filename>`.
+- Admin-protected backend endpoints expect the `admin-token` request header.
 
 ## Screenshots
 
